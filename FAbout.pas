@@ -33,7 +33,6 @@ type
     procedure lbContactEmailClick(Sender: TObject);
     procedure lbProjectLinkClick(Sender: TObject);
     procedure btCloseClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
   private
 
   public
@@ -59,11 +58,6 @@ end;
 procedure TFormAbout.btCloseClick(Sender: TObject);
 begin
   Self.Close;
-end;
-
-procedure TFormAbout.FormCreate(Sender: TObject);
-begin
-  ImageIcon.Picture.Icon := Application.Icon;
 end;
 
 end.
