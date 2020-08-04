@@ -1,0 +1,109 @@
+object FormAbout: TFormAbout
+  Left = 507
+  Height = 299
+  Top = 245
+  Width = 425
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Sobre'
+  ClientHeight = 299
+  ClientWidth = 425
+  OnCreate = FormCreate
+  Position = poScreenCenter
+  LCLVersion = '2.0.10.0'
+  object btClose: TButton
+    Left = 175
+    Height = 25
+    Top = 264
+    Width = 75
+    Cancel = True
+    Caption = 'Fechar'
+    Default = True
+    OnClick = btCloseClick
+    TabOrder = 0
+  end
+  object lbProgramTitle: TLabel
+    Left = 16
+    Height = 20
+    Top = 104
+    Width = 393
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'Calculadora de Indutância e Capacitância'
+    Font.Height = -15
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object lbCreatorLabel: TLabel
+    Left = 16
+    Height = 15
+    Top = 152
+    Width = 43
+    Caption = 'Criador:'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object lbProjectLabel: TLabel
+    Left = 16
+    Height = 15
+    Top = 216
+    Width = 44
+    Caption = 'Projeto:'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object lbCreatorName: TLabel
+    Left = 70
+    Height = 15
+    Top = 152
+    Width = 91
+    Caption = 'Maico Smaniotto'
+    ParentColor = False
+  end
+  object lbProjectLink: TLabel
+    Cursor = crHandPoint
+    Left = 70
+    Height = 15
+    Top = 216
+    Width = 343
+    Caption = 'https://github.com/maico-smaniotto/inductor-capacitor-objpas'
+    Font.Color = clBlue
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = lbProjectLinkClick
+  end
+  object lbContactLabel: TLabel
+    Left = 16
+    Height = 15
+    Top = 184
+    Width = 47
+    Caption = 'Contato:'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object lbContactEmail: TLabel
+    Cursor = crHandPoint
+    Left = 72
+    Height = 15
+    Top = 184
+    Width = 172
+    Caption = 'maicosmaniotto@yahoo.com.br'
+    Font.Color = clBlue
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = lbContactEmailClick
+  end
+  object ImageIcon: TImage
+    Left = 173
+    Height = 80
+    Top = 8
+    Width = 80
+    Center = True
+  end
+end
