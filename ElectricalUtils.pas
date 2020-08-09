@@ -81,9 +81,9 @@ function MultiplyUnit(AValue: Real; AUnit: String): Real;
       DivideUnit(5000, 'kHz'); returns 5 }
 function DivideUnit(AValue: Real; AUnit: String): Real;
 
-{ Formats a value for interchange with simulation softwares
+{ Formats output for interchange with simulation softwares:
   Replaces comma by period, utilizes only the unit prefix and replaces 'μ' by 'u' }
-function FormatValueForInterchange(AValue: String; AUnit: String): String;
+function FormatOutputForInterchange(AValue: String; AUnit: String): String;
 
 { Conversion functions }
 function ReactanceToInductance(AReactance, AFrequency: Real): Real;
@@ -210,7 +210,7 @@ begin
   Result := AValue / GetUnitMultiple(AUnit);
 end;
 
-function FormatValueForInterchange(AValue: String; AUnit: String): String;
+function FormatOutputForInterchange(AValue: String; AUnit: String): String;
 begin
   Result := StringReplace(AValue, ',', '.', []) + StringReplace(GetUnitPrefix(AUnit), 'μ', 'u', []);
 end;

@@ -7,7 +7,7 @@
     Created  : July, 2020
     Contact  : maicosmaniotto@yahoo.com.br
     Language : Object Pascal
-    Compiler : FreePascal v3.2.0 up
+    Compiler : Free Pascal v3.2.0 up
     Requires : Lazarus Component Library (LCL)
 
     Material Design Icons made by Google
@@ -90,6 +90,8 @@ type
     { Actual direction/way of conversion (Impedance to Capacitance OR Capacitance to Impedance) }
     FCapacitorConversion: TConversionWay;
 
+    function FormatResult(AValue: Double): String;
+
     { Methods to arrange the components on screen according to the conversion way }
     procedure SetInductorConversion(AValue: TConversionWay);
     procedure SetCapacitorConversion(AValue: TConversionWay);
@@ -137,12 +139,12 @@ end;
 
 procedure TFormMain.btInductorCopyClick(Sender: TObject);
 begin
-  Clipboard.AsText := FormatValueForInterchange(edInductorResultVal.Text, cbInductorResultUnit.Text);
+  Clipboard.AsText := FormatOutputForInterchange(edInductorResultVal.Text, cbInductorResultUnit.Text);
 end;
 
 procedure TFormMain.btCapacitorCopyClick(Sender: TObject);
 begin
-  Clipboard.AsText := FormatValueForInterchange(edCapacitorResultVal.Text, cbCapacitorResultUnit.Text);
+  Clipboard.AsText := FormatOutputForInterchange(edCapacitorResultVal.Text, cbCapacitorResultUnit.Text);
 end;
 
 procedure TFormMain.btInductorAlternateClick(Sender: TObject);
@@ -261,6 +263,20 @@ procedure TFormMain.FormShow(Sender: TObject);
 begin
   DisplayInductorResult('');
   DisplayCapacitorResult('');
+end;
+
+function TFormMain.FormatResult(AValue: Double): String;
+var
+  ValCrop: Double;
+begin
+  if AValue < 1000000 then
+  begin
+    // Crops the number to 6 decimal places
+    ValCrop := Round(AValue * 1000000) / 1000000;
+    Result := FloatToStr(ValCrop);
+  end
+  else // Greater than or equal 1 000 000, output in scientific notation
+    Result := Format('%.7e', [AValue]);
 end;
 
 procedure TFormMain.SetInductorConversion(AValue: TConversionWay);
@@ -392,19 +408,10 @@ begin
 
   if FInductorResult >= 0 then
   begin
-    //// Formats to 10 decimal places and converts to float again to remove trailing zeroes
-    //edInductorResultVal.Text := FloatToStr(StrToFloat(Format('%.10f', [DivideUnit(FInductorResult, AUnit)])));
-
     // Divides the value by the unit
     ResultVal := DivideUnit(FInductorResult, AUnit);
-    if ResultVal < 1E6 then
-    begin
-      // Crops the number to 6 decimal places
-      ResultVal := Round(ResultVal * 1E6) / 1E6;
-      edInductorResultVal.Text := FloatToStr(ResultVal);
-    end
-    else // If the value is greater than or equal 1E6 then it is shown in scientific notation
-      edInductorResultVal.Text := Format('%.7e', [ResultVal]);
+    // Formats for better display
+    edInductorResultVal.Text := FormatResult(ResultVal);
   end
   else // Negative value is not shown
     edInductorResultVal.Text := '';
@@ -451,24 +458,12 @@ begin
     cbCapacitorResultUnit.OnChange := UnitChangeEvent;
   end;
 
-  //if FCapacitorResult < 0 then
-  //  // Negative value is not shown
-  //  edCapacitorResultVal.Text := ''
-  //else                           // Formats to 10 decimal places and converts to float again to remove trailing zeroes
-  //  edCapacitorResultVal.Text := FloatToStr(StrToFloat(Format('%.10f', [DivideUnit(FCapacitorResult, AUnit)])));
-
   if FCapacitorResult >= 0 then
   begin
     // Divides the value by the unit
     ResultVal := DivideUnit(FCapacitorResult, AUnit);
-    if ResultVal < 1E6 then
-    begin
-      // Crops the number to 6 decimal places
-      ResultVal := Round(ResultVal * 1E6) / 1E6;
-      edCapacitorResultVal.Text := FloatToStr(ResultVal);
-    end
-    else // If the value is greater than or equal 1E6 then it is shown in scientific notation
-      edCapacitorResultVal.Text := Format('%.7e', [ResultVal]);
+    // Formats for better display
+    edCapacitorResultVal.Text := FormatResult(ResultVal);
   end
   else // Negative value is not shown
     edCapacitorResultVal.Text := '';

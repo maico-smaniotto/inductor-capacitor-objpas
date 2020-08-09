@@ -7,7 +7,7 @@
     Created  : July, 2020
     Contact  : maicosmaniotto@yahoo.com.br
     Language : Object Pascal
-    Compiler : FreePascal v3.2.0 up
+    Compiler : Free Pascal v3.2.0 up
     Requires : Lazarus Component Library (LCL)
 
     This program is distributed in the hope that it will be useful,
