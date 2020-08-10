@@ -81,6 +81,9 @@ function MultiplyUnit(AValue: Real; AUnit: String): Real;
       DivideUnit(5000, 'kHz'); returns 5 }
 function DivideUnit(AValue: Real; AUnit: String): Real;
 
+{ Formats a value to given decimal places }
+function FormatValue(AValue: Double; ADecimalPlaces: Integer): String;
+
 { Formats output for interchange with simulation softwares:
   Replaces comma by period, utilizes only the unit prefix and replaces 'μ' by 'u' }
 function FormatOutputForInterchange(AValue: String; AUnit: String): String;
@@ -92,6 +95,8 @@ function ReactanceToCapacitance(AReactance, AFrequency: Real): Real;
 function CapacitanceToReactance(ACapacitance, AFrequency: Real): Real;
 
 implementation
+
+uses Math;
 
 function StringExists(constref AStr: String; constref AArray: array of String): Boolean;
 var
@@ -208,6 +213,22 @@ end;
 function DivideUnit(AValue: Real; AUnit: String): Real;
 begin
   Result := AValue / GetUnitMultiple(AUnit);
+end;
+
+function FormatValue(AValue: Double; ADecimalPlaces: Integer): String;
+var
+  ExpoPrecision: Int64;
+begin
+  if AValue < 1000000 then
+  begin
+    ExpoPrecision := Round(Power(10, ADecimalPlaces));
+
+    // Crops the number to given decimal places
+    AValue := Double(Round(AValue * ExpoPrecision)) / ExpoPrecision;
+    Result := FloatToStr(AValue);
+  end
+  else // Greater than or equal 1 000 000, output in scientific notation
+    Result := Format('%.' + IntToStr(ADecimalPlaces + 1) + 'e', [AValue]);
 end;
 
 function FormatOutputForInterchange(AValue: String; AUnit: String): String;

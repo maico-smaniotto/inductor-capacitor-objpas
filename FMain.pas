@@ -29,6 +29,9 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ComCtrls, Buttons, ExtCtrls, Clipbrd, ElectricalUtils, FHelp, FAbout;
 
+const
+  DECIMAL_PLACES = 6;
+
 type
   { Defines the direction/way of conversion, used for both the capacitor and the inductor:
     cwReactanceToValue -> To convert an Reactance value to Capacitance/Inductance
@@ -89,8 +92,6 @@ type
     FCapacitorResult: Real;
     { Actual direction/way of conversion (Impedance to Capacitance OR Capacitance to Impedance) }
     FCapacitorConversion: TConversionWay;
-
-    function FormatResult(AValue: Double): String;
 
     { Methods to arrange the components on screen according to the conversion way }
     procedure SetInductorConversion(AValue: TConversionWay);
@@ -265,20 +266,6 @@ begin
   DisplayCapacitorResult('');
 end;
 
-function TFormMain.FormatResult(AValue: Double): String;
-var
-  ValCrop: Double;
-begin
-  if AValue < 1000000 then
-  begin
-    // Crops the number to 6 decimal places
-    ValCrop := Round(AValue * 1000000) / 1000000;
-    Result := FloatToStr(ValCrop);
-  end
-  else // Greater than or equal 1 000 000, output in scientific notation
-    Result := Format('%.7e', [AValue]);
-end;
-
 procedure TFormMain.SetInductorConversion(AValue: TConversionWay);
 begin
   FInductorConversion := AValue;
@@ -411,7 +398,7 @@ begin
     // Divides the value by the unit
     ResultVal := DivideUnit(FInductorResult, AUnit);
     // Formats for better display
-    edInductorResultVal.Text := FormatResult(ResultVal);
+    edInductorResultVal.Text := FormatValue(ResultVal, DECIMAL_PLACES);
   end
   else // Negative value is not shown
     edInductorResultVal.Text := '';
@@ -463,7 +450,7 @@ begin
     // Divides the value by the unit
     ResultVal := DivideUnit(FCapacitorResult, AUnit);
     // Formats for better display
-    edCapacitorResultVal.Text := FormatResult(ResultVal);
+    edCapacitorResultVal.Text := FormatValue(ResultVal, DECIMAL_PLACES);
   end
   else // Negative value is not shown
     edCapacitorResultVal.Text := '';
