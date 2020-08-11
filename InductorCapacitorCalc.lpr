@@ -13,7 +13,7 @@
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY
   ********************************************************************** }
-program Convert;
+program InductorCapacitorCalc;
 
 {$mode objfpc}{$H+}
 {$WARN 5044 off : Symbol "$1" is not portable}
@@ -30,6 +30,7 @@ uses
 
 begin
   RequireDerivedFormResource := True;
+  Application.Title := 'Calculadora de Indutância e Capacitância';
   Application.Scaled := True;
   Application.MainFormOnTaskBar := True;
   Application.Initialize;
