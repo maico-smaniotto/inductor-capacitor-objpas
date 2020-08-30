@@ -122,10 +122,10 @@ begin
   FInductorResult      := -1;
   FCapacitorResult     := -1;
 
-  cbInductorFrequencyUnit.Items.Text  := GetFrequencyUnits;
+  cbInductorFrequencyUnit.Items.Text  := GetUnitsAsText(FREQUENCY_UNITS);
   edInductorFrequencyVal.Text         := '60';
   cbInductorFrequencyUnit.Text        := HERTZ;
-  cbCapacitorFrequencyUnit.Items.Text := GetFrequencyUnits;
+  cbCapacitorFrequencyUnit.Items.Text := GetUnitsAsText(FREQUENCY_UNITS);
   edCapacitorFrequencyVal.Text        := '60';
   cbCapacitorFrequencyUnit.Text       := HERTZ;
 
@@ -273,16 +273,16 @@ begin
     cwReactanceToValue:
     begin
       lbInductorInput.Caption         := 'Reatância';
-      cbInductorInputUnit.Items.Text  := GetReactanceUnits;
+      cbInductorInputUnit.Items.Text  := GetUnitsAsText(REACTANCE_UNITS);
       lbInductorResult.Caption        := 'Indutância';
-      cbInductorResultUnit.Items.Text := GetInductanceUnits;
+      cbInductorResultUnit.Items.Text := GetUnitsAsText(INDUCTANCE_UNITS);
     end;
     cwValueToReactance:
     begin
       lbInductorInput.Caption         := 'Indutância';
-      cbInductorInputUnit.Items.Text  := GetInductanceUnits;
+      cbInductorInputUnit.Items.Text  := GetUnitsAsText(INDUCTANCE_UNITS);
       lbInductorResult.Caption        := 'Reatância';
-      cbInductorResultUnit.Items.Text := GetReactanceUnits;
+      cbInductorResultUnit.Items.Text := GetUnitsAsText(REACTANCE_UNITS);
     end;
   end;
 end;
@@ -294,16 +294,16 @@ begin
     cwReactanceToValue:
     begin
       lbCapacitorInput.Caption         := 'Reatância';
-      cbCapacitorInputUnit.Items.Text  := GetReactanceUnits;
+      cbCapacitorInputUnit.Items.Text  := GetUnitsAsText(REACTANCE_UNITS);
       lbCapacitorResult.Caption        := 'Capacitância';
-      cbCapacitorResultUnit.Items.Text := GetCapacitanceUnits;
+      cbCapacitorResultUnit.Items.Text := GetUnitsAsText(CAPACITANCE_UNITS);
     end;
     cwValueToReactance:
     begin
       lbCapacitorInput.Caption         := 'Capacitância';
-      cbCapacitorInputUnit.Items.Text  := GetCapacitanceUnits;
+      cbCapacitorInputUnit.Items.Text  := GetUnitsAsText(CAPACITANCE_UNITS);
       lbCapacitorResult.Caption        := 'Reatância';
-      cbCapacitorResultUnit.Items.Text := GetReactanceUnits;
+      cbCapacitorResultUnit.Items.Text := GetUnitsAsText(REACTANCE_UNITS);
     end;
   end;
 end;
@@ -365,7 +365,7 @@ begin
         begin
           AUnit := GetProperPrefix(FInductorResult) + HENRY;
           // If there is no inductance unit with the returned prefix, then considers the base unit HENRY
-          if Pos(AUnit, GetInductanceUnits) < 1 then
+          if not StringExists(AUnit, INDUCTANCE_UNITS) then
             AUnit := HENRY;
         end
         else // Zero or negative value, then shows the base unit HENRY
@@ -377,7 +377,7 @@ begin
         begin
           AUnit := GetProperPrefix(FInductorResult) + OHM;
           // If there is no reactance unit with the returned prefix, then considers the base unit OHM
-          if Pos(AUnit, GetReactanceUnits) < 1 then
+          if not StringExists(AUnit, REACTANCE_UNITS) then
             AUnit := OHM;
         end
         else // Zero or negative value, then shows the base unit OHM
@@ -417,7 +417,7 @@ begin
         begin
           AUnit := GetProperPrefix(FCapacitorResult) + FARAD;
           // If there is no capacitance unit with the returned prefix, then considers the base unit FARAD
-          if Pos(AUnit, GetCapacitanceUnits) < 1 then
+          if not StringExists(AUnit, CAPACITANCE_UNITS) then
             AUnit := FARAD;
         end
         else // Zero or negative value, then shows the base unit FARAD
@@ -429,7 +429,7 @@ begin
         begin
           AUnit := GetProperPrefix(FCapacitorResult) + OHM;
           // If there is no reactance unit with the returned prefix, then considers the base unit OHM
-          if Pos(AUnit, GetReactanceUnits) < 1 then
+          if not StringExists(AUnit, REACTANCE_UNITS) then
             AUnit := OHM;
         end
         else // Zero or negative value, then shows the base unit OHM

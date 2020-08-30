@@ -39,34 +39,35 @@ const
   KILO_OHM    = PREFIX_KILO + OHM;
   MEGA_OHM    = PREFIX_MEGA + OHM;
   GIGA_OHM    = PREFIX_GIGA + OHM;
+  REACTANCE_UNITS : array [0..3] of String = (OHM, KILO_OHM, MEGA_OHM, GIGA_OHM);
 
   MILI_HENRY  = PREFIX_MILI  + HENRY;
   MICRO_HENRY = PREFIX_MICRO + HENRY;
   NANO_HENRY  = PREFIX_NANO  + HENRY;
+  INDUCTANCE_UNITS : array [0..3] of String = (HENRY, MILI_HENRY, MICRO_HENRY, NANO_HENRY);
 
   MILI_FARAD  = PREFIX_MILI  + FARAD;
   MICRO_FARAD = PREFIX_MICRO + FARAD;
   NANO_FARAD  = PREFIX_NANO  + FARAD;
+  CAPACITANCE_UNITS : array [0..3] of String = (FARAD, MILI_FARAD, MICRO_FARAD, NANO_FARAD);
 
   KILO_HERTZ  = PREFIX_KILO + HERTZ;
   MEGA_HERTZ  = PREFIX_MEGA + HERTZ;
   GIGA_HERTZ  = PREFIX_GIGA + HERTZ;
+  FREQUENCY_UNITS : array [0..3] of String = (HERTZ, KILO_HERTZ, MEGA_HERTZ, GIGA_HERTZ);
 
-function StringExists(constref AStr: String; constref AArray: array of String): Boolean;
+function StringExists(const AStr: String; const AArray: array of String): Boolean;
 
-{ Functions that return the list of units to fill the comboboxes }
-function GetFrequencyUnits: String;
-function GetReactanceUnits: String;
-function GetInductanceUnits: String;
-function GetCapacitanceUnits: String;
+{ Returns the list of units as text (each element separated by a line break) }
+function GetUnitsAsText(const AUnits: array of String): String;
 
 { Returns the prefix of the unit, if it is prefixed, otherwise returns an empty string
   Ex: 'kHz', returns 'k' }
-function GetUnitPrefix(AUnit: String): String;
+function GetUnitPrefix(const AUnit: String): String;
 
 { Returns the multiple value of the unit accordingly to its prefix
   Ex: 'kHz', prefix k equals 10E3 }
-function GetUnitMultiple(AUnit: String): Real;
+function GetUnitMultiple(const AUnit: String): Real;
 
 { Returns the most appropriate prefix for a given value, using engineering notation }
 function GetProperPrefix(AValue: Real): String;
@@ -74,19 +75,19 @@ function GetProperPrefix(AValue: Real): String;
 { Multiplies a value by the prefix weight of the given unit
   Ex: 5 kHz = 5000 Hz
       MultiplyUnit(5, 'kHz'); returns 5000 }
-function MultiplyUnit(AValue: Real; AUnit: String): Real;
+function MultiplyUnit(AValue: Real; const AUnit: String): Real;
 
 { Divides a value by the prefix weight of the given unit
   Ex: 5000 Hz = 5 kHz
       DivideUnit(5000, 'kHz'); returns 5 }
-function DivideUnit(AValue: Real; AUnit: String): Real;
+function DivideUnit(AValue: Real; const AUnit: String): Real;
 
 { Formats a value to given decimal places }
 function FormatValue(AValue: Double; ADecimalPlaces: Integer): String;
 
 { Formats output for interchange with simulation softwares:
   Replaces comma by period, utilizes only the unit prefix and replaces 'μ' by 'u' }
-function FormatOutputForInterchange(AValue: String; AUnit: String): String;
+function FormatOutputForInterchange(const AValue: String; const AUnit: String): String;
 
 { Conversion functions }
 function ReactanceToInductance(AReactance, AFrequency: Real): Real;
@@ -98,7 +99,7 @@ implementation
 
 uses Math;
 
-function StringExists(constref AStr: String; constref AArray: array of String): Boolean;
+function StringExists(const AStr: String; const AArray: array of String): Boolean;
 var
   i: Integer;
 begin
@@ -111,39 +112,20 @@ begin
     end;
 end;
 
-function GetFrequencyUnits: String;
+function GetUnitsAsText(const AUnits: array of String): String;
+var
+  i: Integer;
 begin
-  Result := HERTZ      + sLineBreak +
-            KILO_HERTZ + sLineBreak +
-            MEGA_HERTZ + sLineBreak +
-            GIGA_HERTZ;
+  Result := '';
+  for i := Low(AUnits) to High(AUnits) do
+  begin
+    if Result <> '' then
+      Result := Result + sLineBreak;
+    Result := Result + AUnits[i];
+  end;
 end;
 
-function GetReactanceUnits: String;
-begin
-  Result := OHM      + sLineBreak +
-            KILO_OHM + sLineBreak +
-            MEGA_OHM + sLineBreak +
-            GIGA_OHM;
-end;
-
-function GetInductanceUnits: String;
-begin
-  Result := HENRY       + sLineBreak +
-            MILI_HENRY  + sLineBreak +
-            MICRO_HENRY + sLineBreak +
-            NANO_HENRY;
-end;
-
-function GetCapacitanceUnits: String;
-begin
-  Result := FARAD       + sLineBreak +
-            MILI_FARAD  + sLineBreak +
-            MICRO_FARAD + sLineBreak +
-            NANO_FARAD;
-end;
-
-function GetUnitPrefix(AUnit: String): String;
+function GetUnitPrefix(const AUnit: String): String;
 var
   UStr: UnicodeString;
 begin
@@ -159,7 +141,7 @@ begin
   end;
 end;
 
-function GetUnitMultiple(AUnit: String): Real;
+function GetUnitMultiple(const AUnit: String): Real;
 var
   Prefix: String;
 begin
@@ -205,12 +187,12 @@ begin
       Result := PREFIX_GIGA;
 end;
 
-function MultiplyUnit(AValue: Real; AUnit: String): Real;
+function MultiplyUnit(AValue: Real; const AUnit: String): Real;
 begin
   Result := AValue * GetUnitMultiple(AUnit);
 end;
 
-function DivideUnit(AValue: Real; AUnit: String): Real;
+function DivideUnit(AValue: Real; const AUnit: String): Real;
 begin
   Result := AValue / GetUnitMultiple(AUnit);
 end;
@@ -231,7 +213,7 @@ begin
     Result := Format('%.' + IntToStr(ADecimalPlaces + 1) + 'e', [AValue]);
 end;
 
-function FormatOutputForInterchange(AValue: String; AUnit: String): String;
+function FormatOutputForInterchange(const AValue: String; const AUnit: String): String;
 begin
   Result := StringReplace(AValue, ',', '.', []) + StringReplace(GetUnitPrefix(AUnit), 'μ', 'u', []);
 end;
